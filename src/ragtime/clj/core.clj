@@ -2,6 +2,7 @@
   (:refer-clojure :exclude [load-file])
   (:require
     [ragtime.jdbc]
+    [ragtime.next-jdbc]
     [ragtime.protocols])
   (:import [java.io File]))
 
@@ -40,7 +41,7 @@
                                  (name namespace-symbol)
                                  (name fn-symbol))))))
 
-(defmethod ragtime.jdbc/load-files ".clj" [files]
+(defn- load-clj-migration-files [files]
   (for [file files]
     (let [ns-sym  (-> file slurp clj-file->ns-name symbol)
           _       (require ns-sym)
@@ -50,3 +51,9 @@
       (clj-migration {:id   id
                       :up   up-fn
                       :down down-fn}))))
+
+(defmethod ragtime.jdbc/load-files ".clj" [files]
+  (load-clj-migration-files files))
+
+(defmethod ragtime.next-jdbc/load-files ".clj" [files]
+  (load-clj-migration-files files))
