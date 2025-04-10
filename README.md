@@ -2,19 +2,18 @@
 
 Extension for [ragtime](https://github.com/weavejester/ragtime) that handles migrations as clj files.
 
-[![CircleCI](https://circleci.com/gh/mariusz-jachimowicz-83/ragtime-clj.svg?style=svg)](https://circleci.com/gh/mariusz-jachimowicz-83/ragtime-clj)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/opengb/ragtime-clj/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/opengb/ragtime-clj/tree/master)
 
 ## Installation
 
-[![Clojars Project](https://img.shields.io/clojars/v/com.mjachimowicz/ragtime-clj.svg)](https://clojars.org/com.mjachimowicz/ragtime-clj)
+No Clojars coordinates yet--coming soon!
 
-## Contributors
+## Credits
 
-* [Mariusz Jachimowicz](https://github.com/mariusz-jachimowicz-83)
-* [Rune Juhl Jacobsen](https://github.com/runejuhl)
+* Forked from [ragtime-clj](https://github.com/mariusz-jachimowicz-83/ragtime-clj) by [Mariusz Jachimowicz](https://github.com/mariusz-jachimowicz-83) and contributors.
 
 ## License
 
-Copyright © 2018 Mariusz Jachimowicz
+Copyright © 2025 OPEN Technologies
 
 Distributed under the Eclipse Public License either version 1.0 or (at your option) any later version.
