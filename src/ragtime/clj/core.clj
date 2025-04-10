@@ -20,9 +20,6 @@
   [migration-map]
   (map->CljMigration migration-map))
 
-(defn- file-extension [file]
-  (re-find #"\.[^.]*$" (str file)))
-
 (let [pattern (re-pattern (str "([^\\" File/separator "]*)\\" File/separator "?$"))]
   (defn- basename [file]
     (second (re-find pattern (str file)))))
