@@ -5,7 +5,7 @@
                 :url "http://www.eclipse.org/legal/epl-v10.html"}
 
   :dependencies [[org.clojure/clojure   "1.9.0-beta4"]
-                 [ragtime               "0.8.0"]]
+                 [ragtime               "0.8.1"]]
 
   :deploy-repositories [["clojars" {:sign-releases false}]]
 
