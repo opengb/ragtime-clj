@@ -1,7 +1,6 @@
 (ns ragtime.clj.core
   (:refer-clojure :exclude [load-file])
   (:require
-    [clojure.java.jdbc :as jdbc]
     [ragtime.jdbc]
     [ragtime.protocols])
   (:import [java.io File]))
