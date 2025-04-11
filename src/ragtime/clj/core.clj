@@ -1,8 +1,8 @@
 (ns ragtime.clj.core
   (:refer-clojure :exclude [load-file])
   (:require
-    [clojure.java.jdbc :as jdbc]
     [ragtime.jdbc]
+    [ragtime.next-jdbc]
     [ragtime.protocols])
   (:import [java.io File]))
 
@@ -20,9 +20,6 @@
   keys that map to clojure migration function."
   [migration-map]
   (map->CljMigration migration-map))
-
-(defn- file-extension [file]
-  (re-find #"\.[^.]*$" (str file)))
 
 (let [pattern (re-pattern (str "([^\\" File/separator "]*)\\" File/separator "?$"))]
   (defn- basename [file]
@@ -44,7 +41,7 @@
                                  (name namespace-symbol)
                                  (name fn-symbol))))))
 
-(defmethod ragtime.jdbc/load-files ".clj" [files]
+(defn- load-clj-migration-files [files]
   (for [file files]
     (let [ns-sym  (-> file slurp clj-file->ns-name symbol)
           _       (require ns-sym)
@@ -54,3 +51,9 @@
       (clj-migration {:id   id
                       :up   up-fn
                       :down down-fn}))))
+
+(defmethod ragtime.jdbc/load-files ".clj" [files]
+  (load-clj-migration-files files))
+
+(defmethod ragtime.next-jdbc/load-files ".clj" [files]
+  (load-clj-migration-files files))

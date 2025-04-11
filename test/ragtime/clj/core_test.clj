@@ -1,10 +1,11 @@
 (ns ragtime.clj.core-test
-  (:require [clojure.test :refer :all]
+  (:require [clojure.test      :refer [deftest is use-fixtures]]
             [ragtime.jdbc      :as ragtime-jdbc]
             [ragtime.core      :as ragtime]
+            [ragtime.next-jdbc :as ragtime-next-jdbc]
             [ragtime.protocols :as ragtime-protocols]
             [clojure.java.jdbc :as jdbc]
-            [ragtime.clj.core :refer [clj-file->ns-name]]))
+            [ragtime.clj.core  :refer [clj-file->ns-name]]))
 
 (def db-spec "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1")
 
@@ -16,30 +17,36 @@
   (set (jdbc/query (:db-spec db) ["SHOW TABLES"] {:row-fn :table_name})))
 
 (deftest test-load-directory
-  (let [db  (ragtime-jdbc/sql-database db-spec)
-        ms  (ragtime-jdbc/load-directory "test/migrations")
-        idx (ragtime/into-index ms)]
-    (ragtime/migrate-all db idx ms)
-    (is (= #{"RAGTIME_MIGRATIONS" "FOO" "BAR" "BAZ" "QUZA" "QUZB" "QUXA" "QUXB" "LAST_TABLE" "CLJT_1" "CLJT_2"}
-           (table-names db)))
-    (is (= ["001-test" "002-bar" "003-test" "004-test" "005-test" "006-test" "007_test" "008_test"]
-           (ragtime-protocols/applied-migration-ids db)))
-    (ragtime/rollback-last db idx (count ms))
-    (is (= #{"RAGTIME_MIGRATIONS"} (table-names db)))
-    (is (empty? (ragtime-protocols/applied-migration-ids db)))))
+  (for [{:keys [db]
+         ms    :migrations} [{:db         (ragtime-jdbc/sql-database db-spec)
+                              :migrations (ragtime-jdbc/load-directory "test/migrations")}
+                             {:db         (ragtime-next-jdbc/sql-database db-spec)
+                              :migrations (ragtime-next-jdbc/load-directory "test/migrations")}]]
+    (let [idx (ragtime/into-index ms)]
+      (ragtime/migrate-all db idx ms)
+      (is (= #{"RAGTIME_MIGRATIONS" "FOO" "BAR" "BAZ" "QUZA" "QUZB" "QUXA" "QUXB" "LAST_TABLE" "CLJT_1" "CLJT_2"}
+             (table-names db)))
+      (is (= ["001-test" "002-bar" "003-test" "004-test" "005-test" "006-test" "007_test" "008_test"]
+             (ragtime-protocols/applied-migration-ids db)))
+      (ragtime/rollback-last db idx (count ms))
+      (is (= #{"RAGTIME_MIGRATIONS"} (table-names db)))
+      (is (empty? (ragtime-protocols/applied-migration-ids db))))))
 
 (deftest test-load-resources
-  (let [db  (ragtime-jdbc/sql-database db-spec)
-        ms  (ragtime-jdbc/load-resources "migrations")
-        idx (ragtime/into-index ms)]
-    (ragtime/migrate-all db idx ms)
-    (is (= #{"RAGTIME_MIGRATIONS" "FOO" "BAR" "BAZ" "QUZA" "QUZB" "QUXA" "QUXB" "LAST_TABLE" "CLJT_1" "CLJT_2"}
-           (table-names db)))
-    (is (= ["001-test" "002-bar" "003-test" "004-test" "005-test" "006-test" "007_test" "008_test"]
-           (ragtime-protocols/applied-migration-ids db)))
-    (ragtime/rollback-last db idx (count ms))
-    (is (= #{"RAGTIME_MIGRATIONS"} (table-names db)))
-    (is (empty? (ragtime-protocols/applied-migration-ids db)))))
+  (for [{:keys [db]
+         ms    :migrations} [{:db         (ragtime-jdbc/sql-database db-spec)
+                              :migrations (ragtime-jdbc/load-directory "test/migrations")}
+                             {:db         (ragtime-next-jdbc/sql-database db-spec)
+                              :migrations (ragtime-next-jdbc/load-directory "test/migrations")}]]
+    (let [idx (ragtime/into-index ms)]
+      (ragtime/migrate-all db idx ms)
+      (is (= #{"RAGTIME_MIGRATIONS" "FOO" "BAR" "BAZ" "QUZA" "QUZB" "QUXA" "QUXB" "LAST_TABLE" "CLJT_1" "CLJT_2"}
+             (table-names db)))
+      (is (= ["001-test" "002-bar" "003-test" "004-test" "005-test" "006-test" "007_test" "008_test"]
+             (ragtime-protocols/applied-migration-ids db)))
+      (ragtime/rollback-last db idx (count ms))
+      (is (= #{"RAGTIME_MIGRATIONS"} (table-names db)))
+      (is (empty? (ragtime-protocols/applied-migration-ids db))))))
 
 (deftest ns-name-regex
   (is (=
