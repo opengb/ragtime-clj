@@ -4,6 +4,6 @@
                  org.clojure/java.jdbc {:mvn/version "0.5.8"}}
    :extra-paths ["test"]}}
  :deps
- {dev.weavejester/ragtime {:mvn/version "0.9.0"}
+ {dev.weavejester/ragtime {:mvn/version "0.9.1"}
   org.clojure/clojure     {:mvn/version "1.10.3"}}
  :paths ["src"]}

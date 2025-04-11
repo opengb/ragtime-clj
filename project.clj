@@ -4,7 +4,7 @@
   :license     {:name "Eclipse Public License"
                 :url "http://www.eclipse.org/legal/epl-v10.html"}
 
-  :dependencies [[dev.weavejester/ragtime "0.9.0"]
+  :dependencies [[dev.weavejester/ragtime "0.9.1"]
                  [org.clojure/clojure "1.10.3"]]
 
   :deploy-repositories [["clojars" {:sign-releases false}]]
