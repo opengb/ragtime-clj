@@ -5,7 +5,7 @@
             [ragtime.next-jdbc :as ragtime-next-jdbc]
             [ragtime.protocols :as ragtime-protocols]
             [clojure.java.jdbc :as jdbc]
-            [ragtime.clj.core :refer [clj-file->ns-name]]))
+            [ragtime.clj.core  :refer [clj-file->ns-name]]))
 
 (def db-spec "jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1")
 
